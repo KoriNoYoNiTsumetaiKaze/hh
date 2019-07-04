@@ -2,6 +2,7 @@ package hh;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
@@ -10,13 +11,13 @@ import javax.swing.JFrame;
 
 public class hhForm {
 	
-	private static Object ProfData	= null;
+	private static HashMap ProfData	= null;
 	
-	public static void setProfData(Object pd) {
+	public static void setProfData(HashMap pd) {
 		ProfData	= pd;
 	}
 	
-	public static Object getProfData() {
+	public static HashMap getProfData() {
 		return ProfData;
 	}
 	
