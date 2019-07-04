@@ -10,11 +10,11 @@ import org.json.simple.parser.ParseException;
 
 public class hhData {
 	
-	private String JSONtxt	= "";
-	private String StrURL	= "";
-	private Object ObjJSON	= null;
+	private static String JSONtxt	= null;
+	private static String StrURL	= null;
+	private static Object ObjJSON	= null;
 
-	private void getJSONonURL() throws IOException {
+	private static void getJSONonURL() throws IOException {
 		URL URLobj = new URL(StrURL);
 		HttpURLConnection connection = (HttpURLConnection) URLobj.openConnection();
 		connection.setRequestMethod("GET");
@@ -28,12 +28,12 @@ public class hhData {
 		JSONtxt	= response.toString();
 	}
 
-	private void getObjectJSONonString() throws ParseException {
+	private static void getObjectJSONonString() throws ParseException {
 		JSONParser parser = new JSONParser();
 		ObjJSON = parser.parse(JSONtxt);
 	}
 	
-	public Object getSpecializations() throws IOException, ParseException {
+	public static Object getSpecializations() throws IOException, ParseException {
 		StrURL	= "https://api.hh.ru/specializations";
 		getJSONonURL();
 		getObjectJSONonString();
