@@ -28,13 +28,13 @@ public class hhForm {
         cp.setLayout(new BoxLayout(cp, BoxLayout.Y_AXIS));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        JComboBox ProfArea = new JComboBox<Object>((ComboBoxModel<Object>) ProfData);
+        JComboBox ProfArea = new JComboBox();
         //ProfArea.setPreferredSize(new Dimension(100, 100));
         cp.add(ProfArea);
         
-        JComboBox Prof = new JComboBox((ComboBoxModel) ProfData);
+        //JComboBox Prof = new JComboBox((ComboBoxModel) ProfData);
         //ProfArea.setPreferredSize(new Dimension(100, 100));
-        cp.add(Prof);
+        //cp.add(Prof);
         
         frame.setPreferredSize(new Dimension(500, 500));
         
