@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -35,9 +36,21 @@ public class hhData {
 		JSONParser parser = new JSONParser();
 		ObjJSON = parser.parse(JSONtxt);
 		JSONArray ja = (JSONArray)ObjJSON;
-		for (JSONObject j : ja) {
-			
+		//System.out.println(ja);
+		ArrayList ListPA = new ArrayList();
+		for (int i=0;i<ja.size();i++) {
+			JSONObject jpa	= (JSONObject) ja.get(i);
+			//System.out.println(jpa);
+			int id	= Integer.parseInt(jpa.get("id").toString());
+			System.out.println(id);
+			String name	= (String) jpa.get("name");
+			System.out.println(name);
+			//System.out.println(Integer.parseInt(jpa.get("id").toString()));
+			System.out.println(jpa.get("specializations"));
+			ProfArea pa	= new ProfArea(name,id);
+			ListPA.add(pa);
 		}
+		hhForm.setProfData(ListPA);
 	}
 	
 	public static Object getSpecializations() throws IOException, ParseException {

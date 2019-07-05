@@ -2,6 +2,7 @@ package hh;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.BoxLayout;
@@ -11,13 +12,13 @@ import javax.swing.JFrame;
 
 public class hhForm {
 	
-	private static HashMap ProfData	= null;
+	private static ArrayList ProfData	= null;
 	
-	public static void setProfData(HashMap pd) {
+	public static void setProfData(ArrayList pd) {
 		ProfData	= pd;
 	}
 	
-	public static HashMap getProfData() {
+	public static ArrayList getProfData() {
 		return ProfData;
 	}
 	
@@ -29,7 +30,7 @@ public class hhForm {
         cp.setLayout(new BoxLayout(cp, BoxLayout.Y_AXIS));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         
-        JComboBox ProfArea = new JComboBox();
+        JComboBox ProfArea = new JComboBox(ProfData.toArray());
         //ProfArea.setPreferredSize(new Dimension(100, 100));
         cp.add(ProfArea);
         
