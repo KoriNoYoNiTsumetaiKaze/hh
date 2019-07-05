@@ -43,13 +43,23 @@ public class hhData {
 		StrURL	= "https://api.hh.ru/specializations";
 		getJSONonURL();
 		getObjectJSONonString();
-		JSONArray ja = (JSONArray)ObjJSON;
-		ProfData = new ArrayList<ProfArea>();
-		for (int i=0;i<ja.size();i++) {
-			JSONObject jpa	= (JSONObject) ja.get(i);
-			int id	= Integer.parseInt(jpa.get("id").toString());
-			String name	= (String) jpa.get("name");
-			ProfArea pa	= new ProfArea(name,id);
+		JSONArray ja	= (JSONArray)ObjJSON;
+		ProfData		= new ArrayList<ProfArea>();
+		for (int ipa=0;ipa<ja.size();ipa++) {
+			JSONObject jpa	= (JSONObject) ja.get(ipa);
+			//System.out.println(jpa.get("specializations"));
+			int id_pa		= Integer.parseInt(jpa.get("id").toString());
+			String name_pa	= (String) jpa.get("name");
+			JSONArray jas	= (JSONArray)jpa.get("specializations");
+			ProfArea pa	= new ProfArea(name_pa,id_pa);
+			for (int ip=0;ip<jas.size();ip++) {
+				JSONObject jp	= (JSONObject) jas.get(ip);
+				double id_p		= Double.parseDouble(jp.get("id").toString());
+				String name_p	= (String) jp.get("name");
+				boolean laboring	= (boolean) jp.get("laboring");
+				Prof p	= new Prof(name_p,id_p,laboring);
+				pa.addProf(p);
+			}
 			ProfData.add(pa);
 		}
 		ProfData.sort(new Comparator<ProfArea>(){
