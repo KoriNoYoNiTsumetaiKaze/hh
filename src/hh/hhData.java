@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -43,7 +44,7 @@ public class hhData {
 		getJSONonURL();
 		getObjectJSONonString();
 		JSONArray ja = (JSONArray)ObjJSON;
-		ProfData = new ArrayList();
+		ProfData = new ArrayList<ProfArea>();
 		for (int i=0;i<ja.size();i++) {
 			JSONObject jpa	= (JSONObject) ja.get(i);
 			int id	= Integer.parseInt(jpa.get("id").toString());
@@ -51,6 +52,11 @@ public class hhData {
 			ProfArea pa	= new ProfArea(name,id);
 			ProfData.add(pa);
 		}
+		ProfData.sort(new Comparator<ProfArea>(){
+			public int compare(ProfArea o1, ProfArea o2) {
+				return o1.toString().compareTo(o2.toString());
+			}
+		});
 		return ProfData; 
 	}
 }
