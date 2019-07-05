@@ -17,6 +17,7 @@ public class hhData {
 	private static String JSONtxt	= null;
 	private static String StrURL	= null;
 	private static Object ObjJSON	= null;
+	private static ArrayList<ProfArea> ProfData	= null;
 
 	private static void getJSONonURL() throws IOException {
 		URL URLobj = new URL(StrURL);
@@ -35,28 +36,21 @@ public class hhData {
 	private static void getObjectJSONonString() throws ParseException {
 		JSONParser parser = new JSONParser();
 		ObjJSON = parser.parse(JSONtxt);
-		JSONArray ja = (JSONArray)ObjJSON;
-		//System.out.println(ja);
-		ArrayList ListPA = new ArrayList();
-		for (int i=0;i<ja.size();i++) {
-			JSONObject jpa	= (JSONObject) ja.get(i);
-			//System.out.println(jpa);
-			int id	= Integer.parseInt(jpa.get("id").toString());
-			System.out.println(id);
-			String name	= (String) jpa.get("name");
-			System.out.println(name);
-			//System.out.println(Integer.parseInt(jpa.get("id").toString()));
-			System.out.println(jpa.get("specializations"));
-			ProfArea pa	= new ProfArea(name,id);
-			ListPA.add(pa);
-		}
-		hhForm.setProfData(ListPA);
 	}
 	
 	public static Object getSpecializations() throws IOException, ParseException {
 		StrURL	= "https://api.hh.ru/specializations";
 		getJSONonURL();
 		getObjectJSONonString();
-		return ObjJSON; 
+		JSONArray ja = (JSONArray)ObjJSON;
+		ProfData = new ArrayList();
+		for (int i=0;i<ja.size();i++) {
+			JSONObject jpa	= (JSONObject) ja.get(i);
+			int id	= Integer.parseInt(jpa.get("id").toString());
+			String name	= (String) jpa.get("name");
+			ProfArea pa	= new ProfArea(name,id);
+			ProfData.add(pa);
+		}
+		return ProfData; 
 	}
 }

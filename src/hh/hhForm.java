@@ -12,16 +12,8 @@ import javax.swing.JFrame;
 
 public class hhForm {
 	
-	private static ArrayList ProfData	= null;
-	
-	public static void setProfData(ArrayList pd) {
-		ProfData	= pd;
-	}
-	
-	public static ArrayList getProfData() {
-		return ProfData;
-	}
-	
+	private static ArrayList<ProfArea> ProfData	= null;
+		
 	public static void createGUI()
     {
         JFrame frame = new JFrame("Test frame");
