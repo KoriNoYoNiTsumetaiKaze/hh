@@ -60,6 +60,7 @@ public class hhData {
 				Prof p	= new Prof(name_p,id_p,laboring);
 				pa.addProf(p);
 			}
+			pa.sortProf();
 			ProfData.add(pa);
 		}
 		ProfData.sort(new Comparator<ProfArea>(){

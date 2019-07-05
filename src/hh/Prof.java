@@ -10,4 +10,9 @@ public class Prof {
 		this.id			= id;
 		this.laboring	= laboring;
 	}
+	
+    @Override
+    public String toString() {
+    	return name;
+    }	
 }

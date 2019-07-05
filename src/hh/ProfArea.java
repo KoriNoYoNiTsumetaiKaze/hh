@@ -1,6 +1,7 @@
 package hh;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class ProfArea {
 	private String name	= null;
@@ -24,9 +25,19 @@ public class ProfArea {
 		prof.add(p);
 	}
 	
+	public ArrayList<Prof> getProf(){
+		return prof;
+	}
+	
+	public void sortProf() {
+		prof.sort(new Comparator<Prof>(){
+			public int compare(Prof o1, Prof o2) {
+				return o1.toString().compareTo(o2.toString());
+			}});
+	}
+	
     @Override
     public String toString() {
-    	if (id<10) return "0"+id+" "+name;
-    	else return id+" "+name;
+    	return name;
     }
 }

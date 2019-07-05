@@ -3,6 +3,7 @@ package hh;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,20 @@ import org.json.simple.parser.ParseException;
 public class hhForm {
 	
 	private static ArrayList<ProfArea> ProfData	= null;
+	private static ProfArea selectProfArea	= null;
+	private static JComboBox jprof	= null;
+	
+	public static void setSelectProfArea(ProfArea selectProfArea) {
+		
+		if (selectProfArea==null) return;
+		hhForm.selectProfArea	= selectProfArea;
+		if (jprof==null) return;
+		jprof.removeAllItems();
+		ArrayList<Prof> prof	= selectProfArea.getProf();
+		for (int i=0;i<prof.size();i++) {
+			jprof.addItem(prof.get(i));
+			}
+	}
 		
 	public static void createGUI()
     {
@@ -30,7 +45,7 @@ public class hhForm {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        JFrame frame	= new JFrame("Test frame");
+        JFrame frame	= new JFrame("hh");
         Container cp	= frame.getContentPane(); 
         cp.setLayout(new BoxLayout(cp, BoxLayout.Y_AXIS));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,9 +80,12 @@ public class hhForm {
         
         JComboBox ProfArea	= new JComboBox(ProfData.toArray());
         vericalPanel.add(ProfArea);
+        ActionListener PAactionListener = new SelectProfAreaActionListener();
+        ProfArea.addActionListener(PAactionListener);
         
-       JComboBox prof	= new JComboBox();
-       vericalPanel.add(prof);
+       jprof	= new JComboBox();
+       setSelectProfArea(ProfData.get(0));
+       vericalPanel.add(jprof);
         
         frame.setPreferredSize(new Dimension(500, 500));
         
