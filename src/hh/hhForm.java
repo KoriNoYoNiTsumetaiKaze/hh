@@ -7,13 +7,20 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Vector;
 
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import org.json.simple.parser.ParseException;
 
@@ -25,6 +32,8 @@ public class hhForm {
 	private static JComboBox jprof	= null;
 	private static JLabel PALabel	= null;
 	private static JLabel profLabel	= null;
+	private static ArrayList<Job> findJobs	= null;
+	private static JTable tableFJs	= null;
 	
 	public static void setSelectProfArea(ProfArea selectProfArea) {
 		if (selectProfArea==null) return;
@@ -45,8 +54,23 @@ public class hhForm {
 		if (profLabel!=null) profLabel.setText(selectProf.toString());
 	}
 
-	public static void createGUI()
-    {
+	public static void setFindJobs(ArrayList<Job> findJobs) {
+		if (findJobs==null) return;
+		hhForm.findJobs	= findJobs;
+		if (tableFJs==null) return;
+		//System.out.println(findJobs);
+		DefaultTableModel model = (DefaultTableModel) tableFJs.getModel();
+		for (int i=0;i<findJobs.size();i++) {
+			Job fj	= findJobs.get(i);
+			//System.out.println(fj);
+			Vector<String> newRow = new Vector<String>();
+			newRow.add(fj.getName());
+			newRow.add(fj.getEmployerName());
+			model.addRow(newRow);			
+			}		
+	      }
+
+	public static void createGUI() {
 		try {
 			ProfData	= (ArrayList<ProfArea>) hhData.getSpecializations();
 		} catch (IOException e) {
@@ -106,7 +130,21 @@ public class hhForm {
        setSelectProfArea(ProfData.get(0));
        vericalPanel.add(jprof);
        ActionListener ProfActionListener = new SelectProfActionListener();
-       jprof.addActionListener(ProfActionListener);       
+       jprof.addActionListener(ProfActionListener);
+       
+       JButton button = new JButton("Найти вакансии");
+       vericalPanel.add(button);
+       ActionListener buttonListener = new FindJobsActionListener();
+       button.addActionListener(buttonListener);
+
+       Vector<String> TabHeader = new Vector<String>();
+       TabHeader.add("Вакансия");
+       TabHeader.add("Работодатель");
+       DefaultTableModel model = new DefaultTableModel(TabHeader, 0);
+       tableFJs = new JTable();
+       tableFJs.setModel(model);
+       JScrollPane scrollPane = new JScrollPane(tableFJs);
+       vericalPanel.add(scrollPane);
         
         frame.setPreferredSize(new Dimension(500, 500));
         

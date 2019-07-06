@@ -19,6 +19,7 @@ public class hhData {
 	private static String StrURL	= null;
 	private static Object ObjJSON	= null;
 	private static ArrayList<ProfArea> ProfData	= null;
+	private static ArrayList<Job> FindJob	= null;
 
 	private static void getJSONonURL() throws IOException {
 		URL URLobj = new URL(StrURL);
@@ -73,5 +74,30 @@ public class hhData {
 			}
 		});
 		return ProfData; 
+	}
+	
+	public static ArrayList<Job> getJobs() throws IOException, ParseException {
+		StrURL	= "https://api.hh.ru/vacancies";
+		getJSONonURL();
+		getObjectJSONonString();
+		if (ObjJSON==null) return FindJob;
+		JSONObject fj	= (JSONObject) ObjJSON;
+		if (fj==null) return FindJob;
+		JSONArray items	= (JSONArray)fj.get("items");
+		if (items==null) return FindJob;
+		FindJob			= new ArrayList<Job>();
+		for (int ij=0;ij<items.size();ij++) {
+			JSONObject job	= (JSONObject) items.get(ij);
+			if (job==null) continue;
+			JSONObject employer	= (JSONObject) job.get("employer");
+			if (employer==null) continue;
+			//System.out.println(job);
+			Job vacancy	= new Job(job.get("name").toString(),employer.get("name").toString());
+			FindJob.add(vacancy);
+			//System.out.println(FindJob);
+			//System.out.println(job.get("snippet"));
+		}
+		//System.out.println(FindJob);
+		return FindJob;
 	}
 }
