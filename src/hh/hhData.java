@@ -45,13 +45,15 @@ public class hhData {
 		getObjectJSONonString();
 		JSONArray ja	= (JSONArray)ObjJSON;
 		ProfData		= new ArrayList<ProfArea>();
+		ProfArea pa		= new ProfArea("All/Все",0);
+		ProfData.add(pa);
 		for (int ipa=0;ipa<ja.size();ipa++) {
 			JSONObject jpa	= (JSONObject) ja.get(ipa);
 			//System.out.println(jpa.get("specializations"));
 			int id_pa		= Integer.parseInt(jpa.get("id").toString());
 			String name_pa	= (String) jpa.get("name");
 			JSONArray jas	= (JSONArray)jpa.get("specializations");
-			ProfArea pa	= new ProfArea(name_pa,id_pa);
+			pa	= new ProfArea(name_pa,id_pa);
 			for (int ip=0;ip<jas.size();ip++) {
 				JSONObject jp	= (JSONObject) jas.get(ip);
 				double id_p		= Double.parseDouble(jp.get("id").toString());
@@ -60,6 +62,8 @@ public class hhData {
 				Prof p	= new Prof(name_p,id_p,laboring);
 				pa.addProf(p);
 			}
+			Prof p	= new Prof("All/Все",0,false);
+			pa.addProf(p);			
 			pa.sortProf();
 			ProfData.add(pa);
 		}

@@ -12,6 +12,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.json.simple.parser.ParseException;
@@ -20,29 +21,37 @@ public class hhForm {
 	
 	private static ArrayList<ProfArea> ProfData	= null;
 	private static ProfArea selectProfArea	= null;
+	private static Prof selectProf	= null;
 	private static JComboBox jprof	= null;
+	private static JLabel PALabel	= null;
+	private static JLabel profLabel	= null;
 	
 	public static void setSelectProfArea(ProfArea selectProfArea) {
-		
 		if (selectProfArea==null) return;
 		hhForm.selectProfArea	= selectProfArea;
+		if (PALabel!=null) PALabel.setText(selectProfArea.toString());
 		if (jprof==null) return;
 		jprof.removeAllItems();
 		ArrayList<Prof> prof	= selectProfArea.getProf();
+		if (prof==null) return;
 		for (int i=0;i<prof.size();i++) {
 			jprof.addItem(prof.get(i));
 			}
 	}
-		
+
+	public static void setSelectProf(Prof selectProf) {
+		if (selectProf==null) return;
+		hhForm.selectProf	= selectProf;
+		if (profLabel!=null) profLabel.setText(selectProf.toString());
+	}
+
 	public static void createGUI()
     {
 		try {
 			ProfData	= (ArrayList<ProfArea>) hhData.getSpecializations();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
         JFrame frame	= new JFrame("hh");
@@ -78,14 +87,26 @@ public class hhForm {
         vericalPanel.setPreferredSize(new Dimension(100, 100));
         mainPanel.add(vericalPanel,BorderLayout.CENTER);
         
-        JComboBox ProfArea	= new JComboBox(ProfData.toArray());
-        vericalPanel.add(ProfArea);
+        PALabel = new JLabel("");
+		PALabel.setVerticalAlignment(JLabel.CENTER);
+		PALabel.setHorizontalAlignment(JLabel.LEFT);
+        vericalPanel.add(PALabel);
+        
+        JComboBox PABox	= new JComboBox(ProfData.toArray());
+        vericalPanel.add(PABox);
         ActionListener PAactionListener = new SelectProfAreaActionListener();
-        ProfArea.addActionListener(PAactionListener);
+        PABox.addActionListener(PAactionListener);
+        
+        profLabel = new JLabel("");
+        profLabel.setVerticalAlignment(JLabel.CENTER);
+        profLabel.setHorizontalAlignment(JLabel.LEFT);
+        vericalPanel.add(profLabel);
         
        jprof	= new JComboBox();
        setSelectProfArea(ProfData.get(0));
        vericalPanel.add(jprof);
+       ActionListener ProfActionListener = new SelectProfActionListener();
+       jprof.addActionListener(ProfActionListener);       
         
         frame.setPreferredSize(new Dimension(500, 500));
         
