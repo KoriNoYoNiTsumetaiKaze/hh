@@ -91,6 +91,7 @@ public class hhForm {
 			newRow.add(fj.getName());
 			newRow.add(fj.getSalary());
 			newRow.add(fj.getEmployerName());
+			newRow.add(fj.getAddress());
 			newRow.add(fj.getUrl());
 			model.addRow(newRow);			
 			}		
@@ -129,18 +130,31 @@ public class hhForm {
         southPanel.setPreferredSize(new Dimension(widthPanel,heightPanel));
         southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.X_AXIS));
         mainPanel.add(southPanel,BorderLayout.SOUTH);
-
+        
         JLabel BorderLeftLabel = new JLabel();
         BorderLeftLabel.setPreferredSize(new Dimension(widthPanel,heightPanel));
         southPanel.add(BorderLeftLabel);
+
+        JButton buttonLeft = new JButton("<<");
+        southPanel.add(buttonLeft);
+        //ActionListener buttonListener = new FindJobsActionListener();
+        //button.addActionListener(buttonListener);
+        
         PageField = new JTextField("0");
         southPanel.add(PageField);
+        
         JLabel from = new JLabel(" из ");
         southPanel.add(from);
+        
         PagesLabel = new JLabel("0");
         southPanel.add(PagesLabel);
+        
         JLabel pagesText = new JLabel(" страниц");
         southPanel.add(pagesText);
+        
+        JButton buttonRight = new JButton(">>");
+        southPanel.add(buttonRight);
+        
         JLabel BorderRightLabel = new JLabel();
         BorderRightLabel.setPreferredSize(new Dimension(widthPanel,heightPanel));
         southPanel.add(BorderRightLabel);
@@ -183,6 +197,7 @@ public class hhForm {
        TabHeader.add("Вакансия");
        TabHeader.add("Зарплата");
        TabHeader.add("Работодатель");
+       TabHeader.add("Адрес");
        TabHeader.add("Ссылка на вакансию");
        DefaultTableModel model = new DefaultTableModel(TabHeader, 0);
        tableFJs = new JTable();

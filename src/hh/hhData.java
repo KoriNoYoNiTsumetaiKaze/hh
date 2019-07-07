@@ -22,6 +22,7 @@ public class hhData {
 	private static ArrayList<Job> FindJob	= null;
 
 	private static void getJSONonURL() throws IOException {
+		//System.out.println(StrURL);
 		URL URLobj = new URL(StrURL);
 		HttpURLConnection connection = (HttpURLConnection) URLobj.openConnection();
 		connection.setRequestMethod("GET");
@@ -75,8 +76,7 @@ public class hhData {
 		});
 		return ProfData; 
 	}
-		
-	public static ArrayList<Job> getJobs() throws IOException, ParseException {
+	private static void setPageToURL() {
 	    try {
 	        int page	= Integer.parseInt(hhForm.getPage());
 	        int pages	= hhForm.getPages();
@@ -96,8 +96,68 @@ public class hhData {
 		else {
 			double specialization	= selectProf.getId();
 			if (specialization>0) StrURL	= StrURL+"&specialization="+specialization;
+			else {
+				if (selectProfArea!=null) {
+					specialization	= selectProfArea.getId();
+					if (specialization>0) StrURL	= StrURL+"&specialization="+(int)specialization;
+				}
+			}
+		}	    
+	}
+	
+	private static String getSalary(Object inData) {
+		if (inData==null) return "";
+		JSONObject job	= (JSONObject) inData;
+		Object salaryObject	= job.get("salary");
+		if (salaryObject==null) return "";
+		JSONObject salary	= (JSONObject) salaryObject;
+		StringBuffer buffer = new StringBuffer();
+		Object from = salary.get("from");
+		if (from != null) {
+			buffer.append("от ");
+			buffer.append(from.toString());
+			buffer.append(" ");
 		}
-		FindJob	= new ArrayList<Job>();
+		Object to = salary.get("to");
+		if (to != null) {
+			buffer.append("до ");
+			buffer.append(to.toString());
+			buffer.append(" ");
+		}
+		Object currency = salary.get("currency");
+		if (currency != null) {
+			buffer.append(currency.toString());
+		}
+		return buffer.toString();
+	}
+
+	private static String getAddress(Object inData) {
+		if (inData==null) return "";
+		JSONObject job	= (JSONObject) inData;
+		Object addressObject	= job.get("address");
+		if (addressObject==null) return "";
+		JSONObject address	= (JSONObject) addressObject;
+		StringBuffer buffer = new StringBuffer();
+		Object city = address.get("city");
+		if (city != null) {
+			buffer.append(city.toString());
+			buffer.append(" ");
+		}
+		Object street = address.get("street");
+		if (street != null) {
+			buffer.append(street.toString());
+			buffer.append(" ");
+		}
+		Object building = address.get("building");
+		if (building != null) {
+			buffer.append(building.toString());
+			buffer.append(" ");
+		}
+		return buffer.toString();
+	}
+
+	public static ArrayList<Job> getJobs() throws IOException, ParseException {
+		setPageToURL();
 		getJSONonURL();
 		getObjectJSONonString();
 		if (ObjJSON==null) return FindJob;
@@ -106,35 +166,18 @@ public class hhData {
 		hhForm.setPages(fj.get("page").toString(), fj.get("pages").toString());
 		JSONArray items	= (JSONArray)fj.get("items");
 		if (items==null) return FindJob;
+		FindJob	= new ArrayList<Job>();
 		for (int ij=0;ij<items.size();ij++) {
-			JSONObject job	= (JSONObject) items.get(ij);
-			if (job==null) continue;
-			JSONObject employer	= (JSONObject) job.get("employer");
-			if (employer==null) continue;
+			Object item	= items.get(ij);
+			if (item==null) continue;
+			JSONObject job	= (JSONObject) item;
+			Object employerObject	= job.get("employer");
+			if (employerObject==null) continue;
+			JSONObject employer	= (JSONObject) employerObject;
 			Job vacancy	= new Job(job.get("name").toString(),employer.get("name").toString());
 			vacancy.setUrl(job.get("alternate_url").toString());
-			JSONObject salary	= (JSONObject) job.get("salary");
-			if (salary!=null) {
-				StringBuffer buffer = new StringBuffer();
-				
-				Object from	= salary.get("from");
-				if (from!=null) {
-					buffer.append("от ");
-					buffer.append(from.toString());
-					buffer.append(" ");
-				}
-				Object to	= salary.get("to");
-				if (to!=null) {
-					buffer.append("до ");
-					buffer.append(to.toString());
-					buffer.append(" ");
-				}
-				Object currency	= salary.get("currency");
-				if (currency!=null) {
-					buffer.append(currency.toString());
-					}
-				vacancy.setSalary(buffer.toString());
-			}
+			vacancy.setSalary(getSalary(job));
+			vacancy.setSalary(getAddress(job));
 			FindJob.add(vacancy);
 		}
 		return FindJob;

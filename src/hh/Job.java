@@ -5,7 +5,16 @@ public class Job {
 	private String name			= null;
 	private String url			= null;
 	private String salary		= null;
+	private String address		= null;
 	
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	public String getSalary() {
 		return salary;
 	}
