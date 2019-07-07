@@ -89,7 +89,9 @@ public class hhForm {
 			Job fj	= findJobs.get(i);
 			Vector<String> newRow = new Vector<String>();
 			newRow.add(fj.getName());
+			newRow.add(fj.getSalary());
 			newRow.add(fj.getEmployerName());
+			newRow.add(fj.getUrl());
 			model.addRow(newRow);			
 			}		
 	      }
@@ -179,7 +181,9 @@ public class hhForm {
 
        Vector<String> TabHeader = new Vector<String>();
        TabHeader.add("Вакансия");
+       TabHeader.add("Зарплата");
        TabHeader.add("Работодатель");
+       TabHeader.add("Ссылка на вакансию");
        DefaultTableModel model = new DefaultTableModel(TabHeader, 0);
        tableFJs = new JTable();
        tableFJs.setModel(model);

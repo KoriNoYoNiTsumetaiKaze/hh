@@ -112,6 +112,29 @@ public class hhData {
 			JSONObject employer	= (JSONObject) job.get("employer");
 			if (employer==null) continue;
 			Job vacancy	= new Job(job.get("name").toString(),employer.get("name").toString());
+			vacancy.setUrl(job.get("alternate_url").toString());
+			JSONObject salary	= (JSONObject) job.get("salary");
+			if (salary!=null) {
+				StringBuffer buffer = new StringBuffer();
+				
+				Object from	= salary.get("from");
+				if (from!=null) {
+					buffer.append("от ");
+					buffer.append(from.toString());
+					buffer.append(" ");
+				}
+				Object to	= salary.get("to");
+				if (to!=null) {
+					buffer.append("до ");
+					buffer.append(to.toString());
+					buffer.append(" ");
+				}
+				Object currency	= salary.get("currency");
+				if (currency!=null) {
+					buffer.append(currency.toString());
+					}
+				vacancy.setSalary(buffer.toString());
+			}
 			FindJob.add(vacancy);
 		}
 		return FindJob;
