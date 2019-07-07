@@ -38,8 +38,20 @@ public class hhForm {
 	private static JTextField PageField			= null;
 	private static JLabel PagesLabel			= null;
 
-	public static String getPage() {
-		return PageField.getText();
+	public static void setPage(String page) {
+		PageField.setText(page);
+	}
+
+	public static void setPage(int page) {
+		PageField.setText(""+page);
+	}
+	
+	public static int getPage() {
+		int page	= 0;
+	    try {
+	    	page	= Integer.parseInt(PageField.getText());
+	    	} catch (NumberFormatException e) {}
+	    return page;
 	}
 
 	public static int getPages() {
@@ -137,10 +149,11 @@ public class hhForm {
 
         JButton buttonLeft = new JButton("<<");
         southPanel.add(buttonLeft);
-        //ActionListener buttonListener = new FindJobsActionListener();
-        //button.addActionListener(buttonListener);
+        ActionListener buttonLeftListener = new MinusPageActionListener();
+        buttonLeft.addActionListener(buttonLeftListener);        
         
         PageField = new JTextField("0");
+        PageField.setHorizontalAlignment(JTextField.RIGHT);
         southPanel.add(PageField);
         
         JLabel from = new JLabel(" из ");
@@ -149,11 +162,13 @@ public class hhForm {
         PagesLabel = new JLabel("0");
         southPanel.add(PagesLabel);
         
-        JLabel pagesText = new JLabel(" страниц");
+        JLabel pagesText = new JLabel(" страниц ");
         southPanel.add(pagesText);
         
         JButton buttonRight = new JButton(">>");
         southPanel.add(buttonRight);
+        ActionListener buttonRightListener = new PlusPageActionListener();
+        buttonRight.addActionListener(buttonRightListener);
         
         JLabel BorderRightLabel = new JLabel();
         BorderRightLabel.setPreferredSize(new Dimension(widthPanel,heightPanel));

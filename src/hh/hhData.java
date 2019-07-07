@@ -77,14 +77,10 @@ public class hhData {
 		return ProfData; 
 	}
 	private static void setPageToURL() {
-	    try {
-	        int page	= Integer.parseInt(hhForm.getPage());
-	        int pages	= hhForm.getPages();
-	        if (page<pages)	StrURL	= "https://api.hh.ru/vacancies?per_page=100&page="+page;
-	        	else StrURL	= "https://api.hh.ru/vacancies?per_page=100";
-	    } catch (NumberFormatException e) {
-	    	StrURL	= "https://api.hh.ru/vacancies?per_page=100";
-	    }
+		int page	= hhForm.getPage();
+		int pages	= hhForm.getPages();
+		if (page<pages)	StrURL	= "https://api.hh.ru/vacancies?per_page=100&page="+page;
+		else StrURL	= "https://api.hh.ru/vacancies?per_page=100";
 		ProfArea selectProfArea	= hhForm.getSelectProfArea();
 		Prof selectProf	= hhForm.getSelectProf();
 		if (selectProf==null){
@@ -132,6 +128,7 @@ public class hhData {
 	}
 
 	private static String getAddress(Object inData) {
+		//System.out.println(inData);
 		if (inData==null) return "";
 		JSONObject job	= (JSONObject) inData;
 		Object addressObject	= job.get("address");
@@ -139,6 +136,7 @@ public class hhData {
 		JSONObject address	= (JSONObject) addressObject;
 		StringBuffer buffer = new StringBuffer();
 		Object city = address.get("city");
+		//System.out.println(city);
 		if (city != null) {
 			buffer.append(city.toString());
 			buffer.append(" ");
@@ -177,7 +175,7 @@ public class hhData {
 			Job vacancy	= new Job(job.get("name").toString(),employer.get("name").toString());
 			vacancy.setUrl(job.get("alternate_url").toString());
 			vacancy.setSalary(getSalary(job));
-			vacancy.setSalary(getAddress(job));
+			vacancy.setAddress(getAddress(job));
 			FindJob.add(vacancy);
 		}
 		return FindJob;
