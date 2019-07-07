@@ -19,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
@@ -27,13 +28,36 @@ import org.json.simple.parser.ParseException;
 public class hhForm {
 	
 	private static ArrayList<ProfArea> ProfData	= null;
-	private static ProfArea selectProfArea	= null;
-	private static Prof selectProf	= null;
-	private static JComboBox jprof	= null;
-	private static JLabel PALabel	= null;
-	private static JLabel profLabel	= null;
-	private static ArrayList<Job> findJobs	= null;
-	private static JTable tableFJs	= null;
+	private static ProfArea selectProfArea		= null;
+	private static Prof selectProf				= null;
+	private static JComboBox jprof				= null;
+	private static JLabel PALabel				= null;
+	private static JLabel profLabel				= null;
+	private static ArrayList<Job> findJobs		= null;
+	private static JTable tableFJs				= null;
+	private static JTextField PageField			= null;
+	private static JLabel PagesLabel			= null;
+
+	public static String getPage() {
+		return PageField.getText();
+	}
+
+	public static int getPages() {
+		return Integer.parseInt(PagesLabel.getText());
+	}
+	
+	public static void setPages(String page, String pages) {
+		PageField.setText(page);
+		PagesLabel.setText(pages);
+	}
+	
+	public static ProfArea getSelectProfArea() {
+		return selectProfArea;
+	}
+
+	public static Prof getSelectProf() {
+		return selectProf;
+	}
 	
 	public static void setSelectProfArea(ProfArea selectProfArea) {
 		if (selectProfArea==null) return;
@@ -58,11 +82,11 @@ public class hhForm {
 		if (findJobs==null) return;
 		hhForm.findJobs	= findJobs;
 		if (tableFJs==null) return;
-		//System.out.println(findJobs);
+		//tableFJs.removeAll();
 		DefaultTableModel model = (DefaultTableModel) tableFJs.getModel();
+		model.setRowCount(0);
 		for (int i=0;i<findJobs.size();i++) {
 			Job fj	= findJobs.get(i);
-			//System.out.println(fj);
 			Vector<String> newRow = new Vector<String>();
 			newRow.add(fj.getName());
 			newRow.add(fj.getEmployerName());
@@ -88,16 +112,37 @@ public class hhForm {
         cp.add(mainPanel);
 
         int widthPanel	= 15;
-        int heightPanel	= widthPanel; 
+        int heightPanel	= 20; 
         
         JPanel northPanel	= new JPanel();
         northPanel.setPreferredSize(new Dimension(widthPanel,heightPanel));
         mainPanel.add(northPanel,BorderLayout.NORTH);
 
+        PALabel = new JLabel("");
+		PALabel.setVerticalAlignment(JLabel.CENTER);
+		PALabel.setHorizontalAlignment(JLabel.LEFT);
+		northPanel.add(PALabel);
+
         JPanel southPanel	= new JPanel();
         southPanel.setPreferredSize(new Dimension(widthPanel,heightPanel));
+        southPanel.setLayout(new BoxLayout(southPanel, BoxLayout.X_AXIS));
         mainPanel.add(southPanel,BorderLayout.SOUTH);
 
+        JLabel BorderLeftLabel = new JLabel();
+        BorderLeftLabel.setPreferredSize(new Dimension(widthPanel,heightPanel));
+        southPanel.add(BorderLeftLabel);
+        PageField = new JTextField("0");
+        southPanel.add(PageField);
+        JLabel from = new JLabel(" из ");
+        southPanel.add(from);
+        PagesLabel = new JLabel("0");
+        southPanel.add(PagesLabel);
+        JLabel pagesText = new JLabel(" страниц");
+        southPanel.add(pagesText);
+        JLabel BorderRightLabel = new JLabel();
+        BorderRightLabel.setPreferredSize(new Dimension(widthPanel,heightPanel));
+        southPanel.add(BorderRightLabel);
+        
         JPanel westPanel	= new JPanel();
         westPanel.setPreferredSize(new Dimension(widthPanel,heightPanel));
         mainPanel.add(westPanel,BorderLayout.WEST);
@@ -110,12 +155,7 @@ public class hhForm {
         vericalPanel.setLayout(new BoxLayout(vericalPanel, BoxLayout.Y_AXIS));
         vericalPanel.setPreferredSize(new Dimension(100, 100));
         mainPanel.add(vericalPanel,BorderLayout.CENTER);
-        
-        PALabel = new JLabel("");
-		PALabel.setVerticalAlignment(JLabel.CENTER);
-		PALabel.setHorizontalAlignment(JLabel.LEFT);
-        vericalPanel.add(PALabel);
-        
+                
         JComboBox PABox	= new JComboBox(ProfData.toArray());
         vericalPanel.add(PABox);
         ActionListener PAactionListener = new SelectProfAreaActionListener();

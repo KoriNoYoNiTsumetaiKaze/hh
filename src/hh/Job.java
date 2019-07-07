@@ -1,19 +1,19 @@
 package hh;
 
 public class Job {
-	private static String employerName	= null;
-	private static String name			= null;
+	private String employerName	= null;
+	private String name			= null;
 	
 	Job(String name,String employerName){
 		this.employerName	= employerName;
 		this.name			= name;
 	}
 
-	public static String getEmployerName() {
+	public String getEmployerName() {
 		return employerName;
 	}
 
-	public static String getName() {
+	public String getName() {
 		return name;
 	}
 	

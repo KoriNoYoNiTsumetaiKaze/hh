@@ -75,29 +75,45 @@ public class hhData {
 		});
 		return ProfData; 
 	}
-	
+		
 	public static ArrayList<Job> getJobs() throws IOException, ParseException {
-		StrURL	= "https://api.hh.ru/vacancies";
+	    try {
+	        int page	= Integer.parseInt(hhForm.getPage());
+	        int pages	= hhForm.getPages();
+	        if (page<pages)	StrURL	= "https://api.hh.ru/vacancies?per_page=100&page="+page;
+	        	else StrURL	= "https://api.hh.ru/vacancies?per_page=100";
+	    } catch (NumberFormatException e) {
+	    	StrURL	= "https://api.hh.ru/vacancies?per_page=100";
+	    }
+		ProfArea selectProfArea	= hhForm.getSelectProfArea();
+		Prof selectProf	= hhForm.getSelectProf();
+		if (selectProf==null){
+			if (selectProfArea!=null) {
+				int specialization	= selectProfArea.getId();
+				if (specialization>0) StrURL	= StrURL+"&specialization="+specialization;
+			}
+		}
+		else {
+			double specialization	= selectProf.getId();
+			if (specialization>0) StrURL	= StrURL+"&specialization="+specialization;
+		}
+		FindJob	= new ArrayList<Job>();
 		getJSONonURL();
 		getObjectJSONonString();
 		if (ObjJSON==null) return FindJob;
 		JSONObject fj	= (JSONObject) ObjJSON;
 		if (fj==null) return FindJob;
+		hhForm.setPages(fj.get("page").toString(), fj.get("pages").toString());
 		JSONArray items	= (JSONArray)fj.get("items");
 		if (items==null) return FindJob;
-		FindJob			= new ArrayList<Job>();
 		for (int ij=0;ij<items.size();ij++) {
 			JSONObject job	= (JSONObject) items.get(ij);
 			if (job==null) continue;
 			JSONObject employer	= (JSONObject) job.get("employer");
 			if (employer==null) continue;
-			//System.out.println(job);
 			Job vacancy	= new Job(job.get("name").toString(),employer.get("name").toString());
 			FindJob.add(vacancy);
-			//System.out.println(FindJob);
-			//System.out.println(job.get("snippet"));
 		}
-		//System.out.println(FindJob);
 		return FindJob;
 	}
 }

@@ -14,5 +14,9 @@ public class Prof {
     @Override
     public String toString() {
     	return name;
-    }	
+    }
+
+	public double getId() {
+		return id;
+	}	
 }
